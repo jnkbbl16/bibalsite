@@ -1,0 +1,96 @@
+{% extends "layout/base.html" %}
+
+{% block 'title' %} Add User {% endblock 'title' %}
+
+{% block 'content' %}
+
+{% include "include/sidebar.html" %}
+{% include "include/ToastMessage.html" %}
+
+<div class="p-2 sm:ml-64 mt-16 md:mt-14">
+    <form action="/user/add" method="post">
+        {% csrf_token %}
+  <div class="bg-white rounded-2xl shadow p-8 max-w-3xl mx-auto">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <div class="flex flex-col gap-1">
+        <label for="full-name" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Full Name</label>
+        <input type="text" id="full-name" name="full_name" placeholder="e.g. Juan dela Cruz"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+    <div class="flex flex-col gap-1">
+    <label for="gender" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Gender</label>
+    <div class="relative">
+        <select id="gender" name="gender"
+        class="w-full h-11 px-3 pr-10 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition appearance-none">
+        <option value="">Select Gender</option>
+        {% for gender in genders %}
+            <option value="{{ gender.gender_id }}">{{ gender.gender }}</option>
+        {% endfor %}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+        </div>
+    </div>
+    </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="username" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a username"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="birth-date" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Birth Date</label>
+        <input type="date" id="birth-date" name="birth_date"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="password" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Password</label>
+        <input type="password" id="password" name="password" placeholder="Min. 8 characters"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="address" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Address</label>
+        <input type="text" id="address" name="address" placeholder="Street, City, Province"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label for="confirm-password" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm_password" placeholder="Re-enter password"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+      </div>
+
+      <div class="flex flex-col gap-1 md:col-span-2">
+        <label for="contact" class="text-xs font-medium text-gray-500 uppercase tracking-wide">Contact Number</label>
+        <input type="tel" id="contact" name="contact_number" placeholder="+63 900 000 0000"
+          class="h-11 px-3 border border-gray-300 rounded-lg text-sm text-gray-800 bg-gray-50 focus:outline-none focus:border-gray-700 focus:bg-white transition" />
+    <div class="flex justify-end gap-3 mt-12">
+    <button type="submit" class="bg-green-600 hover:bg-green-700 text-sm font-medium text-white px-3 py-2.5 rounded-sm shadow-sm cursor-pointer">Save User</button>
+  </div>
+      </div>
+
+    </div>
+
+
+  </div>
+  
+  </form>
+</div>
+
+
+{% endblock 'content' %}
