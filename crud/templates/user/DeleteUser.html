@@ -1,0 +1,97 @@
+{% extends "layout/base.html" %}
+
+{% block 'title' %} Delete User {% endblock 'title' %}
+
+{% block 'content' %}
+
+{% include "include/sidebar.html" %}
+{% include "include/ToastMessage.html" %}
+
+<div class="p-2 sm:ml-64 mt-16 md:mt-14">
+  <form action="/user/delete/{{ user.user_id }}" method="post">
+    {% csrf_token %}
+    <div class="bg-white rounded-2xl shadow p-8 max-w-3xl mx-auto">
+
+      <div class="flex flex-col items-center mb-6">
+        <div class="relative w-24 h-24 mb-2">
+          {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}"
+              class="w-24 h-24 rounded-full object-cover border-2 border-gray-200" />
+          {% else %}
+            <img src="https://ui-avatars.com/api/?name={{ user.full_name }}&background=e5e7eb&color=6b7280&size=96"
+              class="w-24 h-24 rounded-full object-cover border-2 border-gray-200" />
+          {% endif %}
+        </div>
+        <p class="text-sm font-medium text-gray-700">{{ user.full_name }}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Full Name</label>
+          <input type="text" value="{{ user.full_name }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Email</label>
+          <input type="text" value="{{ user.email }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Gender</label>
+          <input type="text" value="{{ user.gender.gender }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Username</label>
+          <input type="text" value="{{ user.username }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Birth Date</label>
+          <input type="text" value="{{ user.birth_date|date:'F d, Y' }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Address</label>
+          <input type="text" value="{{ user.address }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+        <div class="flex flex-col gap-1 md:col-span-2">
+          <label class="text-xs font-medium text-gray-500 uppercase tracking-wide">Contact Number</label>
+          <input type="text" value="{{ user.contact_number }}" disabled
+            class="h-11 px-3 border border-gray-200 rounded-lg text-sm text-gray-400 bg-gray-100 cursor-not-allowed" />
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+      <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p class="text-sm text-red-600">Are you sure you want to delete <span class="font-semibold">{{ user.full_name }}</span>? This action cannot be undone.</p>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-4">
+        <a href="/user/list"
+          class="bg-gray-100 hover:bg-gray-200 text-sm font-medium text-gray-700 px-4 py-2.5 rounded-sm shadow-sm cursor-pointer">
+          Cancel
+        </a>
+        <button type="submit"
+          class="bg-red-600 hover:bg-red-700 text-sm font-medium text-white px-4 py-2.5 rounded-sm shadow-sm cursor-pointer">
+          Delete User
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+</div>
+
+{% endblock 'content' %}

@@ -28,3 +28,4 @@ class Users(models.Model):
     password = models.CharField(max_length=255, blank=False) # password VARCHAR(255) NOT NULL
     created_at = models.DateTimeField(auto_now_add=True) # created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     updated_at = models.DateTimeField(auto_now=True) # updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)

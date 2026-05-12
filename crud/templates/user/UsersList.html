@@ -10,6 +10,19 @@ Users List
 {% include "include/ToastMessage.html" %}
 
 <div class="p-2 sm:ml-64 mt-16 md:mt-14">
+
+    <div class="mb-3 max-w-sm">
+        <div class="relative">
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                </svg>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search users..."
+                class="w-full h-10 pl-9 pr-4 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-gray-500 transition" />
+        </div>
+    </div>
+
     <div class="relative overflow-x-auto rounded-sm shadow-sm">
         <table class="w-full">
             <thead class="text-xs text-left text-white bg-blue-600">
@@ -23,10 +36,19 @@ Users List
                     <th class="px-6 py-3">Action</th>
                 </tr>
             </thead>
-            <tbody class="text-xs text-black">
+            <tbody class="text-xs text-black" id="userTableBody">
                 {% for user in users %}
                     <tr class="hover:bg-gray-100 border-b border-gray-200">
-                        <td class="px-6 py-3">{{ user.full_name }}</td>
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-3">
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}" class="w-8 h-8 rounded-full object-cover" />
+                                {% else %}
+                                    <img src="https://ui-avatars.com/api/?name={{ user.full_name }}&background=e5e7eb&color=6b7280&size=32" class="w-8 h-8 rounded-full" />
+                                {% endif %}
+                                {{ user.full_name }}
+                            </div>
+                        </td>
                         <td class="px-6 py-3">{{ user.gender.gender }}</td>
                         <td class="px-6 py-3">{{ user.birth_date }}</td>
                         <td class="px-6 py-3">{{ user.address }}</td>
@@ -34,16 +56,69 @@ Users List
                         <td class="px-6 py-3">{{ user.email }}</td>
                         <td class="px-6 py-3">
                             <div class="inline-flex shadow-sm">
-                                <a href="#" class="bg-green-600 px-3 py-2.5 font-medium text-white rounded-s-sm hover:bg-green-700 hover:outline-none">Edit</a>
-                                <a href="#" class="bg-red-600 px-3 py-2.5 font-medium text-sm text-white rounded-e-sm hover:bg-red-700 hover:outline-none">Delete</a>
+                                <a href="/user/edit/{{ user.user_id }}" class="bg-green-600 px-3 py-2.5 font-medium text-white rounded-s-sm hover:bg-green-700 hover:outline-none">Edit</a>
+                                <a href="/user/delete/{{ user.user_id }}" class="bg-red-600 px-3 py-2.5 font-medium text-sm text-white rounded-e-sm hover:bg-red-700 hover:outline-none">Delete</a>
                             </div>
                         </td>
                     </tr>
                 {% endfor %}
-            </body>
+            </tbody>
         </table>
+
+        <div id="noResults" class="hidden text-center text-sm text-gray-400 py-6">
+            No users found.
+        </div>
+
+        <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 text-xs text-gray-500">
+            <span>
+                Showing {{ users.start_index }}–{{ users.end_index }} of {{ users.paginator.count }} users
+            </span>
+            <div class="inline-flex gap-1">
+                {% if users.has_previous %}
+                    <a href="?page=1" class="px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-100">«</a>
+                    <a href="?page={{ users.previous_page_number }}" class="px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-100">‹</a>
+                {% endif %}
+
+                {% for num in users.paginator.page_range %}
+                    {% if users.number == num %}
+                        <span class="px-3 py-1.5 rounded bg-blue-600 text-white">{{ num }}</span>
+                    {% elif num >= users.number|add:"-2" and num <= users.number|add:"2" %}
+                        <a href="?page={{ num }}" class="px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-100">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if users.has_next %}
+                    <a href="?page={{ users.next_page_number }}" class="px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-100">›</a>
+                    <a href="?page={{ users.paginator.num_pages }}" class="px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-100">»</a>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 </div>
 
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('userTableBody');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        const rows = tableBody.querySelectorAll('tr');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        noResults.classList.toggle('hidden', visibleCount > 0);
+    });
+</script>
 
 {% endblock 'content' %}
